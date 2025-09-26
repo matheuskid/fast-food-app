@@ -36,7 +36,7 @@ async function FilaClientesNoCaixa(intervalo) {
         filaClientes.push(clienteNumero)
         var novoClienteSpan = document.createElement('span')
         novoClienteSpan.innerHTML = `<span class='px-3 py-1 bg-gray-200 rounded-lg'>${clienteNumero}</span>`
-        document.getElementById("secao-fila").appendChild(novoClienteSpan)
+        document.getElementById("secao-fila-clientes").appendChild(novoClienteSpan)
         await sleep(1000 * intervalo)
         clienteNumero++
     }
