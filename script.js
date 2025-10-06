@@ -4,15 +4,19 @@ const btnParar = document.getElementById('parar')
 
 
 // --- ELEMENTOS DO DOM ---
-const secaoFila = document.getElementById("secao-fila-clientes")
-const secaoAtendimento = document.getElementById("secao-cliente-atendimento")
+const secaoClientesFila = document.getElementById("secao-clientes-fila")
+const secaoClienteAtendimento = document.getElementById("secao-cliente-atendimento")
 const secaoPedidoPreparando = document.getElementById("secao-pedido-preparando")
 const secaoPedidosAguardando = document.getElementById("secao-pedidos-aguardando")
 const secaoPedidosProntos = document.getElementById("secao-pedidos-prontos")
 const secaoPedidoEntrega = document.getElementById("secao-pedido-entrega")
+const secaoClientesEsperando = document.getElementById("secao-clientes-esperando")
+const secaoClientesAtendidos = document.getElementById("secao-clientes-atendidos")
+
 
 let STATUS_SIMULACAO = false  //True = em execução | False = parada
 let FILA_CLIENTES = []
+let FILA_CLIENTES_ATENDIDOS = []
 let COZINHEIRO_OCUPADO = false   //true = cozinhando | false = ocioso
 let ENTREGADOR_OCUPADO = false  //true = ocupado | false = ocioso
 
@@ -55,7 +59,7 @@ async function geradorDeClientes() {
         novoClienteSpan.id = `fila-cliente-${clienteNumero}`;
         novoClienteSpan.className = 'px-3 py-1 bg-gray-200 rounded-lg';
         novoClienteSpan.innerText = clienteNumero;
-        secaoFila.appendChild(novoClienteSpan);
+        secaoClientesFila.appendChild(novoClienteSpan);
 
         FILA_CLIENTES.push(clienteNumero)
 
@@ -70,24 +74,41 @@ async function atendimento() {
             let clienteNumero = FILA_CLIENTES.shift()
 
             let clienteSpan = document.getElementById(`fila-cliente-${clienteNumero}`)
-            secaoAtendimento.appendChild(clienteSpan)
+            secaoClienteAtendimento.appendChild(clienteSpan)
             
             await sleep(2000) // Cliente fazendo pedido
-
-            //Inicialmente, testar com apenas um cliente por vez
-            await processarPedido(clienteNumero)
+            
+            FILA_CLIENTES_ATENDIDOS.push(processarPedido(clienteNumero))
         } else {
-            await sleep(50);
+            await sleep(500)
         }
     }
 }
 
-async function processarPedido(cliente) {    
-    // As funções agora são `async` e usam `await` para esperar de verdade
+async function processarPedido(cliente) {
+    var pedidoSpan = secaoClienteAtendimento.removeChild(document.getElementById(`fila-cliente-${cliente}`))
+    var pedidoSpanClone = pedidoSpan.cloneNode(true)
+
+    // Cliente esperando receber o pedido (fila de espera)
+    secaoClientesEsperando.appendChild(pedidoSpanClone)
+
+    // Pedido esperando o prepraro (fila de espera)
+    secaoPedidosAguardando.appendChild(pedidoSpan)
     await checaOcupado("cozinheiro")
-    await cozinhar(cliente)
+
+    // Pedido em preparo
+    secaoPedidoPreparando.appendChild(pedidoSpan)
+    await cozinhar()
+    
+    secaoPedidosProntos.appendChild(pedidoSpan)
     await checaOcupado("entregador")
-    await entregar(cliente)
+
+    secaoPedidoEntrega.appendChild(pedidoSpan)
+    await entregar()
+    secaoPedidoEntrega.removeChild(pedidoSpan)
+
+    secaoClientesAtendidos.appendChild(pedidoSpanClone)
+    return cliente
 }
 
 async function checaOcupado(quem) {
@@ -102,30 +123,19 @@ async function checaOcupado(quem) {
     }
 }
 
-async function cozinhar(cliente) {
+async function cozinhar() {
     let tempoPreparo = document.getElementById('int_preparo').value * 1000
     COZINHEIRO_OCUPADO = true
     
-    let pedidoSpan = document.getElementById(`fila-cliente-${cliente}`)
-    secaoAtendimento.removeChild(pedidoSpan)
-    secaoPedidoPreparando.appendChild(pedidoSpan)
-    
-    await sleep(tempoPreparo) // Espera o tempo de preparo
-
-    secaoPedidoPreparando.removeChild(pedidoSpan)
-    secaoPedidosProntos.appendChild(pedidoSpan)
+    await sleep(tempoPreparo)
     
     COZINHEIRO_OCUPADO = false
 }
 
-async function entregar(cliente) {
-    ENTREGADOR_OCUPADO = true;
-    
-    let clienteSpan = document.getElementById(`fila-cliente-${cliente}`)
-    secaoPedidosProntos.removeChild(clienteSpan) // Sai da cozinha
-    secaoPedidoEntrega.appendChild(clienteSpan) // Vai para entrega
+async function entregar() {
+    ENTREGADOR_OCUPADO = true
 
-    await sleep(2000); // 2 segundos fixos para entregar
+    await sleep(2000)
 
-    ENTREGADOR_OCUPADO = false;
+    ENTREGADOR_OCUPADO = false
 }

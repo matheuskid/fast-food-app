@@ -42,54 +42,63 @@
     </div>
 
     <!-- Área Principal (80%) -->
-    <div class="w-4/5 p-6 grid grid-rows-[2fr_2fr_2fr_2fr_2fr_2fr] gap-4 overflow-hidden">
+    <div class="w-4/5 p-6 grid grid-rows-[2fr_2fr_2fr_2fr_2fr] gap-4 overflow-hidden">
       
-      <!-- 1. Fila de Clientes -->
-      <div class="bg-gray-100 rounded-lg shadow-sm p-3 overflow-y-auto">
-        <h2 class="text-lg font-bold text-gray-700 mb-2">Fila de Clientes</h2>
-        <div id="secao-fila-clientes" class="flex flex-wrap gap-2">
-          <!-- Exemplo: <span class="px-3 py-1 bg-gray-200 rounded-lg">#101</span> -->
+      <!-- 1. Fila de Clientes + Cliente em Atendimento -->
+      <div class="grid grid-cols-[2fr_1fr] gap-4">
+        <!-- Fila de Clientes -->
+        <div class="bg-gray-100 rounded-lg shadow-sm p-3 overflow-y-auto">
+          <h2 class="text-lg font-bold text-gray-700 mb-2">Fila de Clientes</h2>
+          <div id="secao-clientes-fila" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <!-- Cliente em Atendimento -->
+        <div class="bg-green-100 rounded-lg shadow-sm p-3 overflow-y-auto">
+          <h2 class="text-lg font-bold text-gray-700 mb-2">Cliente em Atendimento</h2>
+          <div id="secao-cliente-atendimento" class="flex flex-wrap gap-2"></div>
         </div>
       </div>
 
-      <!-- 2. Cliente em Atendimento -->
-      <div class="bg-green-100 rounded-lg shadow-sm p-3 overflow-y-auto">
-        <h2 class="text-lg font-bold text-gray-700 mb-2">Cliente em Atendimento</h2>
-        <div id="secao-cliente-atendimento" class="flex flex-wrap gap-2">
-          <!-- Exemplo: <span class="px-3 py-1 bg-green-200 rounded-lg">#102</span> -->
+      <!-- 2. Fila de Pedidos + Pedido em Preparação -->
+      <div class="grid grid-cols-[2fr_1fr] gap-4">
+        <!-- Fila de Pedidos -->
+        <div class="bg-yellow-100 rounded-lg shadow-sm p-3 overflow-y-auto">
+          <h2 class="text-lg font-bold text-gray-700 mb-2">Fila de Pedidos</h2>
+          <div id="secao-pedidos-aguardando" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <!-- Pedido em Preparação -->
+        <div class="bg-yellow-200 rounded-lg shadow-sm p-3 overflow-y-auto">
+          <h2 class="text-lg font-bold text-gray-700 mb-2">Pedido em Preparação</h2>
+          <div id="secao-pedido-preparando" class="flex flex-wrap gap-2"></div>
         </div>
       </div>
 
-      <!-- 3. Fila de Pedidos -->
-      <div class="bg-gray-100 rounded-lg shadow-sm p-3 overflow-y-auto">
-        <h2 class="text-lg font-bold text-gray-700 mb-2">Fila de Pedidos</h2>
-        <div id="secao-pedidos-aguardando" class="flex flex-wrap gap-2">
-          <!-- Exemplo: <span class="px-3 py-1 bg-gray-200 rounded-lg">#201</span> -->
+      <!-- 3. Pedidos Prontos + Pedido em Entrega -->
+      <div class="grid grid-cols-[2fr_1fr] gap-4">
+        <!-- Pedidos Prontos -->
+        <div class="bg-blue-100 rounded-lg shadow-sm p-3 overflow-y-auto">
+          <h2 class="text-lg font-bold text-gray-700 mb-2">Pedidos Prontos</h2>
+          <div id="secao-pedidos-prontos" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <!-- Pedido em Entrega -->
+        <div class="bg-green-100 rounded-lg shadow-sm p-3 overflow-y-auto">
+          <h2 class="text-lg font-bold text-gray-700 mb-2">Pedido em Entrega</h2>
+          <div id="secao-pedido-entrega" class="flex flex-wrap gap-2"></div>
         </div>
       </div>
 
-      <!-- 4. Pedido em Preparação -->
-      <div class="bg-yellow-100 rounded-lg shadow-sm p-3 overflow-y-auto">
-        <h2 class="text-lg font-bold text-gray-700 mb-2">Pedido em Preparação</h2>
-        <div id="secao-pedido-preparando" class="flex flex-wrap gap-2">
-          <!-- Exemplo: <span class="px-3 py-1 bg-yellow-200 rounded-lg">#202</span> -->
-        </div>
-      </div>
-
-      <!-- 5. Pedidos Prontos -->
-      <div class="bg-blue-100 rounded-lg shadow-sm p-3 overflow-y-auto">
-        <h2 class="text-lg font-bold text-gray-700 mb-2">Pedidos Prontos</h2>
-        <div id="secao-pedidos-prontos" class="flex flex-wrap gap-2">
-          <!-- Exemplo: <span class="px-3 py-1 bg-blue-200 rounded-lg">#301</span> -->
-        </div>
-      </div>
-
-      <!-- 6. Pedido em Entrega -->
+      <!-- 4. Clientes Esperando Pedido -->
       <div class="bg-red-100 rounded-lg shadow-sm p-3 overflow-y-auto">
-        <h2 class="text-lg font-bold text-gray-700 mb-2">Pedido em Entrega</h2>
-        <div id="secao-pedido-entrega" class="flex flex-wrap gap-2">
-          <!-- Exemplo: <span class="px-3 py-1 bg-red-200 rounded-lg">#302</span> -->
-        </div>
+        <h2 class="text-lg font-bold text-gray-700 mb-2">Clientes Esperando Pedido</h2>
+        <div id="secao-clientes-esperando" class="flex flex-wrap gap-2"></div>
+      </div>
+
+      <!-- 5. Clientes Atendidos -->
+      <div class="bg-green-100 rounded-lg shadow-sm p-3 overflow-y-auto">
+        <h2 class="text-lg font-bold text-gray-700 mb-2">Clientes Atendidos</h2>
+        <div id="secao-clientes-atendidos" class="flex flex-wrap gap-2"></div>
       </div>
 
     </div>
