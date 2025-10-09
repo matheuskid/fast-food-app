@@ -1,57 +1,131 @@
-O Desafio
+# 🍽️ Simulador de Sistema de Pedidos
 
-Esse desafio tem como objetivo por em prática conhecimentos de Promises e programação assincrona por meio da simulação de um restaurante de fast-food. Nesse restaurante existem 4 atores principais:
+Este projeto simula o funcionamento de um restaurante com **filas de clientes, pedidos e entregas**, utilizando **JavaScript assíncrono (async/await)** para representar eventos acontecendo em paralelo, como chegada de clientes, atendimento, preparo e entrega dos pedidos.
 
-- Cliente: entra no restaurante e realiza um pedido;
-- Atendente: anota o pedido do cliente e passa para o cozinheiro. O tempo de anotar o pedido
-- Cozinheiro: prepara o pedido do cliente e passa para o garçom;
-- Garçom: serve o pedido ao cliente.
+---
 
-Visto de forma sincrona, parece uma tarefa fácil, porém existem as constantes:
+## 🚀 Tecnologias Utilizadas
 
-1. Os clientes chegam ao restaurante em um intervalo de tempo.
-2. O atendente, cozinheiro e garçom demoram um certo intervalo de tempo para realizar suas ações.
+- **HTML5**  
+- **Tailwind CSS**  
+- **JavaScript (ES6+)**
 
-Com essas constantes é possivel ver que alguns desses atores ficariam ociosos esperando, por exemplo, o cozinheiro preparar o pedido. Por meio da programação assincrona, é possivel que os clientes cheguem no restaurante e tenham seus pedidos anotados enquanto o cozinheiro e o garçom estejam realizando suas funções em paralelo.
+---
 
-É uma simulação de algo real que acontece no dia-a-dia que pode ser de muito valor para o entendimento e aprofundamento em conceitos e programação assincrona em qualquer linguagem.
+## 🎯 Objetivo
 
-Primeiros passos
+O sistema tem como objetivo **simular um fluxo realista de atendimento em um restaurante**, controlando o estado de cada cliente e pedido em tempo real.
 
-Inicialmente é necessário responder algumas perguntas principais:
+A simulação segue as seguintes etapas:
 
-Já sabemos que vamos usar JS, mas será necessário usar algum framework?
+1. Chegada na fila de clientes  
+2. Atendimento para realizar o pedido  
+3. Espera enquanto o pedido é preparado  
+4. Pedido em preparo (cozinheiro ocupado)  
+5. Pedido pronto  
+6. Pedido sendo entregue (entregador ocupado)  
+7. Cliente atendido com sucesso
 
-Escolhi usar JS puro diretamente pelo navegador por dois motivos: não estou tão familiarizado, então é uma boa oportunidade de aprendizado, e pois acredito que seja o suficiente para atender as necessidades do aplicativo (promises e uma interface simples para visualização. Um framework como react ou vue acrescentariam uma lógica extra desnecessária para o projeto.
+---
 
-Como esse projeto será desenvolvido?
+## 🧠 Estrutura da Interface (HTML)
 
-Vou usar alguns conceitos de programação ágil para dividir a programação de partes do projeto em sprints, mas para isso é necessário fazer uma leve documentação do que precisa ser entregue para que seja possivel criar o backlog. A partir do backlog podemos fazer a priorização, criação das sprints e depois o desenvolvimento.
+A tela principal é dividida em **duas áreas**:
 
-Proximo post → Estruturação do trabalho (backlog, sprints, cronograma)
+### 🧩 1. Área de Configurações
+**Intervalo de Chegada**: tempo (em segundos) entre a chegada de novos clientes.
 
-                → Listagem das ferramentas (quadro kanbam, grafico burndown, etc)
+**Tempo de Preparo**: tempo (em segundos) para preparo de cada pedido.
 
-         → Inicio do desenvolvimento.
+**Botões**:
+  - `Iniciar`: inicia a simulação.
+  - `Parar`: interrompe a execução.
 
-### Estruturação do Trabalho
+### 🍽️ 2. Área Principal
+Dividida em **5 seções** principais:
 
-- [x]  Usuário pode ver uma área de entrada que permite a inserção do intervalo de tempo para a chegada de clientes e um intervalo de tempo para o cumprimento de um pedido pelo cozinheiro.
-- [x]  O usuário pode ver uma área de fila de pedidos contendo uma caixa de texto que mostra o número de clientes esperando para fazer pedidos.
-- [x]  O usuário pode ver uma área de pedidos contendo caixas de texto que mostram o *número do pedido* que está sendo atendido atualmente.
-- [x]  O usuário pode ver uma área de cozinha contendo uma caixa de texto que mostra o *número do pedido* que está sendo preparado e uma caixa de texto listando os pedidos em espera em sequência, junto com uma contagem do número de pedidos em espera.
-- [x]  O usuário pode parar a simulação a qualquer momento clicando em um botão Parar.
-- [x]  O usuário pode ver uma área de Retirada contendo uma caixa de texto que mostra o *número do pedido* que está atualmente disponível para retirada pelo Cliente
-    - [x]  + uma caixa de texto mostrando os Clientes esperando na fila de atendimento.
-- [x]  Lógica para área de clientes
-    - [x]  Fila de clientes
-    - [x]  Recepção e anotação de pedidos
-    - [x]  Fila de clientes esperando
-- [x]  O usuário pode iniciar a simulação clicando em um botão Iniciar.
-- [x]  Lógica para cozinha
-    - [x]  Fila de pedidos em espera
-    - [x]  Preparo de pedidos
-    - [x]  Fila de pedidos prontos
-- [x]  Lógica para entrega de pedidos
-    - [x]  Lista de pedidos esperando para serem entregues
-    - [x]  Lista clientes esperando
+| Seção | Conteúdo | Observação |
+|-------|-----------|------------|
+| 1 | Fila de Clientes + Cliente em Atendimento | Representa os clientes chegando e sendo atendidos |
+| 2 | Fila de Pedidos + Pedido em Preparação | Mostra os pedidos aguardando e sendo preparados |
+| 3 | Pedidos Prontos + Pedido em Entrega | Exibe os pedidos prontos e em fase de entrega |
+| 4 | Clientes Esperando Pedido | Clientes que já fizeram o pedido e aguardam |
+| 5 | Clientes Atendidos | Clientes que já receberam o pedido |
+
+---
+
+## ⚙️ Lógica da Simulação (JavaScript)
+
+A lógica está toda concentrada no arquivo `script.js`.
+
+### 🔄 Fluxo Geral
+
+1. **Início da simulação (`iniciar`)**  
+   Ativa o sistema (`STATUS_SIMULACAO = true`) e executa simultaneamente:
+   - `geradorDeClientes()`  
+   - `atendimento()`
+
+2. **Geração de Clientes (`geradorDeClientes`)**  
+   Cria novos clientes em intervalos definidos (`int_chegada`).  
+   Cada cliente recebe um identificador e entra na **fila de clientes**.
+
+3. **Atendimento (`atendimento`)**  
+   Retira um cliente da fila e o move para a seção **Cliente em Atendimento**.  
+   Após alguns segundos (simulando o pedido), o cliente gera um pedido e entra na função `processarPedido()`.
+
+4. **Processamento de Pedido (`processarPedido`)**  
+   Representa todo o ciclo de vida do pedido:
+   - Cliente vai para a fila de **Clientes Esperando Pedido**  
+   - Pedido vai para **Fila de Pedidos**
+   - Aguarda o **cozinheiro** ficar livre (`checaOcupado('cozinheiro')`)
+   - Pedido vai para **Pedido em Preparação**
+   - Após o tempo de preparo (`cozinhar()`), vai para **Pedidos Prontos**
+   - Aguarda o **entregador** ficar livre (`checaOcupado('entregador')`)
+   - Vai para **Pedido em Entrega**
+   - Depois de entregue (`entregar()`), o cliente vai para **Clientes Atendidos**
+
+---
+
+## 🧩 Principais Funções
+
+| Função | Descrição |
+|--------|------------|
+| `iniciar()` | Inicia a simulação executando os processos em paralelo |
+| `parar()` | Interrompe a execução da simulação |
+| `geradorDeClientes()` | Cria clientes periodicamente com base no intervalo definido |
+| `atendimento()` | Simula o atendimento dos clientes e o envio dos pedidos |
+| `processarPedido()` | Gerencia o fluxo completo do pedido até a entrega |
+| `checaOcupado(quem)` | Verifica se o cozinheiro ou entregador está disponível |
+| `cozinhar()` | Simula o tempo de preparo de um pedido |
+| `entregar()` | Simula o tempo de entrega do pedido |
+| `sleep(ms)` | Pausa a execução por um tempo determinado (função auxiliar) |
+
+---
+
+## 🔁 Estados Controlados
+
+| Variável | Tipo | Função |
+|-----------|------|--------|
+| `STATUS_SIMULACAO` | boolean | Indica se a simulação está em andamento |
+| `FILA_CLIENTES` | array | Lista de clientes aguardando atendimento |
+| `COZINHEIRO_OCUPADO` | boolean | Indica se o cozinheiro está preparando um pedido |
+| `ENTREGADOR_OCUPADO` | boolean | Indica se o entregador está ocupado entregando um pedido |
+
+---
+
+## 🖥️ Execução
+
+1. Abra o arquivo `index.html` em qualquer navegador moderno.  
+2. Defina:
+   - **Intervalo de Chegada (s)**  
+   - **Tempo de Preparo (s)**
+3. Clique em **Iniciar**.
+4. Observe a movimentação dinâmica dos clientes e pedidos nas seções.
+
+Para interromper a simulação, clique em **Parar**.
+
+---
+
+## ! Importante
+
+O desafio pedia o desenvolvimento usando Promises nativas do JS, porém resolvi fazer com async / await pois julgo ser uma forma melhor de representar o fluxo assíncrono e conseguir os resultados esperados de forma mais eficiente e moderna. 

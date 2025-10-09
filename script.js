@@ -78,7 +78,9 @@ async function atendimento() {
             
             await sleep(2000) // Cliente fazendo pedido
             
-            FILA_CLIENTES_ATENDIDOS.push(processarPedido(clienteNumero))
+            
+            // FILA_CLIENTES_ATENDIDOS.push(processarPedido(clienteNumero))
+            processarPedido(clienteNumero)
         } else {
             await sleep(500)
         }
